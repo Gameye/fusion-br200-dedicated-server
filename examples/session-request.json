@@ -1,0 +1,20 @@
+{
+  "id": "br200-match-0001",
+  "image": "fusion-br200-gameye",
+  "version": "sha-<commit>",
+  "location": "eu-central-1",
+  "env": {
+    "SESSION_NAME": "br200-match-0001",
+    "PHOTON_REGION": "eu",
+    "MAX_PLAYERS": "2",
+    "GAME_MODE": "battleRoyale",
+    "GAME_SCENE": "GenArea7",
+    "GAME_PORT": "7777",
+    "RECORD_SESSION": "true"
+  },
+  "labels": {
+    "match": "0001"
+  },
+  "restart": false,
+  "ttl": "15m"
+}

@@ -1,0 +1,17 @@
+# This repository holds only the Gameye kit. Keep Photon, BR200 and other vendor files out of it.
+/Assets/*
+!/Assets/Gameye/
+!/Assets/Gameye.meta
+/Library/
+/Temp/
+/Obj/
+/Logs/
+/Builds/
+/UserSettings/
+/Packages/
+/ProjectSettings/
+Recordings/
+*.unitypackage
+.env
+.env.*
+.DS_Store

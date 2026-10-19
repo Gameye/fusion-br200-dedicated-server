@@ -1,0 +1,10 @@
+**
+!docker/
+!docker/Dockerfile
+!docker/entrypoint.sh
+!Builds/
+!Builds/linux-server/
+!Builds/linux-server/**
+Builds/linux-server/*BackUpThisFolder_ButDontShipItWithYourGame/**
+Builds/linux-server/*BurstDebugInformation_DoNotShip/**
+Builds/linux-server/*.json
