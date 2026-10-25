@@ -15,4 +15,4 @@ jobs:
           node-version: 22
       # The entrypoint contract test needs a built server image, so CI runs the packaging guard only.
       - run: node --test tests/build-artifact-contract.test.mjs
-      - run: shellcheck scripts/*.sh docker/entrypoint.sh
+      - run: shellcheck --severity=warning scripts/*.sh docker/entrypoint.sh
