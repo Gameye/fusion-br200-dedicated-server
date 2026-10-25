@@ -34,6 +34,8 @@ scripts/build-linux-server.sh
 
 The script calls the Unity CLI (`~/.unity/bin/unity`, or set `UNITY_CLI`) with `Gameye.Editor.BR200ServerBuild.Build`. It pins the editor to 6000.3.19f1 on `arm64`, the Apple silicon editor. Change `--architecture` on an x86-64 machine. The output is `Builds/linux-server/BR200.x86_64` with its data folder and libraries, plus a `server-build-report.json` that records the target, subtarget, scripting backend and result.
 
+The script empties `Builds/linux-server` first, so nothing from an earlier build is left behind. The build report also holds a `manifestSha256`: one hash over every file that ships.
+
 Unity defines `UNITY_SERVER` only for the Server subtarget. That is why the build method sets the subtarget itself and checks it in the build report before it exits 0.
 
 ## 3. Package and test it locally
@@ -43,7 +45,7 @@ scripts/docker-build-server.sh                     # builds fusion-br200-gameye:
 SESSION_NAME=br200-local-1 PHOTON_REGION=us MAX_PLAYERS=4 scripts/docker-run-server.sh
 ```
 
-Before it calls Docker, `docker-build-server.sh` checks that the build report says Server, IL2CPP and Succeeded. It also checks that the executable and both native libraries are Linux x86-64. The image is `linux/amd64` because Gameye nodes run on x86-64. It copies only the runtime build. It leaves out source, logs and Unity's `DoNotShip` folders.
+Before it calls Docker, `docker-build-server.sh` checks that the build report says Server, IL2CPP and Succeeded. It also checks that the executable and both native libraries are Linux x86-64, and that the files in `Builds/linux-server` still match the report's `manifestSha256`, so a folder with files from another build is refused. The image is labelled with the project's commit. If the project isn't the root of its own git repository, for example when it sits inside another one, the label is `GIT_SHA=unknown` and the script prints a warning. The image is `linux/amd64` because Gameye nodes run on x86-64. It copies only the runtime build. It leaves out source, logs and Unity's `DoNotShip` folders.
 
 The run script publishes the server on `127.0.0.1:25000/udp` and keeps `/data` in a named volume. Point two editor clients at that address to check a join before you upload anything.
 
@@ -68,6 +70,8 @@ For GHCR, the image owner must match your Gameye organization name. Give the Git
 In the Gameye Admin Panel, create an application that points at the repository, without a tag. Declare UDP port 7777. If you change `GAME_PORT`, declare that port instead.
 
 ## 5. Start a match
+
+**Start sessions cold, without a warm pool.** Every match needs its own `SESSION_NAME`, and BR200 reads it when the server starts. A warm-pool server has already started. While a warm pool is enabled, Gameye ignores the request's environment variables, even when the pool is empty and it starts a server cold, and uses the pool's settings instead. Until Gameye can pass per-match settings to a warm server, keep warm pools off for this application.
 
 Your matchmaker calls `POST /session` when a match is ready. [`examples/session-request.json`](examples/session-request.json) is a two-player battle royale on one map:
 

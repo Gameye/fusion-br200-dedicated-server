@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 image="${1:-fusion-br200-gameye:local}"
 (( $# <= 1 )) || { printf 'Usage: %s [image:tag]; configure native options through env\n' "$0" >&2; exit 64; }
 : "${SESSION_NAME:?Set SESSION_NAME to a unique local room}"
