@@ -4,6 +4,9 @@ set -euo pipefail
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 unity_cli="${UNITY_CLI:-${HOME}/.unity/bin/unity}"
 
+# Start from an empty folder, so files from an earlier build can't end up in the image.
+rm -rf "$project_dir/Builds/linux-server"
+
 exec "$unity_cli" build "$project_dir" \
   --target StandaloneLinux64 \
   --execute-method Gameye.Editor.BR200ServerBuild.Build \
